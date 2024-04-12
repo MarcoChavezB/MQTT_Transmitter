@@ -3,7 +3,7 @@ import ssl
 import _thread
 
 # Configuración de MQTT   PONERLO EN TEST AWS 
-topic = "device/data"
+topic = "motors/control"
 
 def on_connect(client, userdata, flags, rc):
     print("Conectado al broker MQTT con resultado: " + str(rc))
@@ -25,7 +25,7 @@ client.connect("a169mg5ru5h2z1-ats.iot.us-east-2.amazonaws.com", 8883, 60)
 
 
 def send_message(key):
-    client.publish(topic, payload=key, qos=0, retain=False)
+    client.publish(topic, payload=key, qos=1, retain=False)
     
 def main():
     print("Presiona WASD para mover y Q para salir")
@@ -35,10 +35,12 @@ def main():
         
         if key.lower() == 'q':
             break
-        elif key.lower() in ['w', 'a', 's', 'd']:
+        elif key.lower() in ['w', 'a', 's', 'd', 'o', 'p', 'i', 'k']:
             send_message(key.lower())
         else:
             print("Tecla no válida. Presiona WASD para mover y Q para salir")
+            print("Carro detenido")
+            send_message('')
 
 
 _thread.start_new_thread(main, ())
